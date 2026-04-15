@@ -8,8 +8,13 @@
 
 @media (max-width: 899px) {
   .hero {
+    /* Reserva extra embaixo: o marquee usa margin negativo; sem isso o glass fica colado na faixa no carregamento (svh + barra do navegador). */
     padding-top: calc(var(--header-height) + var(--space-3));
-    padding-bottom: var(--space-3);
+    padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero__content {
+    margin-bottom: var(--space-2);
   }
 }
 
@@ -77,6 +82,13 @@
   border-bottom: 1px solid var(--color-border-default);
   background: rgba(17, 17, 17, 0.9);
   overflow: hidden;
+}
+
+@media (max-width: 899px) {
+  .jesus-marquee {
+    /* Menos “puxão” para cima no mobile — evita encostar no glass-panel antes do reflow ao rolar. */
+    margin-top: calc(-1 * var(--space-3));
+  }
 }
 
 .jesus-marquee__viewport {
