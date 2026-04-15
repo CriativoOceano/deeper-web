@@ -24,6 +24,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+app-root {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--color-bg-main);
+}
+
 /* Headings: Black Han só no hero (.heading-hero); resto = Barlow Condensed */
 h1:not(.heading-hero),
 h2,

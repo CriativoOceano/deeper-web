@@ -1,4 +1,35 @@
 <app-shell>
+  @if (!splashDismissed()) {
+    <div
+      class="splash"
+      [class.splash--phase2]="splashPhase() >= 2"
+      [class.splash--exit]="splashPhase() === 3"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="splash-line1"
+    >
+      <div class="splash__noise" aria-hidden="true"></div>
+      <div class="splash__vignette" aria-hidden="true"></div>
+      <div class="splash__orb splash__orb--a" aria-hidden="true"></div>
+      <div class="splash__orb splash__orb--b" aria-hidden="true"></div>
+      <div class="splash__grid" aria-hidden="true"></div>
+      <div class="splash__scan" aria-hidden="true"></div>
+
+      <div class="splash__stage">
+        <div class="splash__block splash__block--1">
+          <p id="splash-line1" class="splash__line splash__line--hero" data-shine="O futuro é mais profundo">
+            O futuro é mais profundo
+          </p>
+        </div>
+        <div class="splash__block splash__block--2">
+          <p class="splash__line splash__line--cta" aria-live="polite">
+            <span class="splash__cta-prefix">Vem ser</span>
+            <span class="splash__cta-deeper" data-shine="DEEPER">DEEPER</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  }
   <app-glass-header />
   <a
     class="back-to-top glass-panel"
