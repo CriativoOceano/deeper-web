@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { About } from '../../sections/about/about';
 import { Events } from '../../sections/events/events';
 import { FinalCta } from '../../sections/final-cta/final-cta';
@@ -23,15 +23,8 @@ import { SiteFooter } from '../../layout/site-footer/site-footer';
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
-export class HomePage implements OnInit {
+export class HomePage {
   readonly isAtTop = signal(true);
-  readonly isLoaded = signal(false);
-
-  ngOnInit(): void {
-    requestAnimationFrame(() => {
-      this.isLoaded.set(true);
-    });
-  }
 
   @HostListener('window:scroll')
   onWindowScroll(): void {

@@ -59,10 +59,6 @@
 }
 
 @media (max-width: 767px) {
-  .hero {
-    min-height: calc(100svh - 56px);
-  }
-
   .hero__actions {
     width: 100%;
     display: grid;
