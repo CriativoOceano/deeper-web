@@ -29,6 +29,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: 1;
   background: radial-gradient(70% 55% at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.72) 100%);
 }
 
@@ -178,6 +179,11 @@
   -webkit-text-stroke: 0;
   text-shadow: none;
   transform: skewX(-4deg);
+  opacity: 0;
+}
+
+.splash--phase2 .splash__cta-prefix {
+  animation: splashPrefixPhaseIn 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
 }
 
 .splash__cta-deeper {
@@ -191,7 +197,16 @@
   text-shadow:
     0 0 18px rgba(170, 220, 0, 0.38),
     0 10px 32px rgba(170, 220, 0, 0.14);
-  animation: splashPulse 2.4s ease-in-out infinite;
+  transform-origin: 50% 50%;
+  opacity: 0;
+  transform: scale(0.88);
+  filter: blur(4px);
+}
+
+.splash--phase2:not(.splash--exit) .splash__cta-deeper {
+  animation:
+    deeperPhaseReveal 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.78s forwards,
+    splashPulse 2.4s ease-in-out 1.58s infinite;
 }
 
 .splash__line--hero::after,
@@ -214,16 +229,63 @@
   -webkit-background-clip: text;
   background-clip: text;
   mix-blend-mode: screen;
+}
+
+.splash__line--hero::after {
   animation: vibeShine 3.4s ease-in-out infinite;
 }
 
 .splash__cta-deeper::after {
-  animation-duration: 3s;
+  opacity: 0;
+}
+
+.splash--phase2:not(.splash--exit) .splash__cta-deeper::after {
+  animation: vibeShine 3s ease-in-out 1.42s infinite;
 }
 
 .splash--exit {
   pointer-events: none;
-  animation: splashExit 1.2s cubic-bezier(0.33, 0.12, 0.2, 1) forwards;
+  animation: splashExitFadeAll 0.48s cubic-bezier(0.25, 0.1, 0.25, 1) 0.68s forwards;
+}
+
+.splash--exit .splash__noise {
+  animation: splashExitNoiseOut 0.65s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__vignette {
+  animation: splashExitVignetteOut 0.65s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__orb {
+  animation: splashExitOrbOut 0.65s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__grid {
+  animation: splashExitGridOut 0.65s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__scan {
+  animation: splashExitScanOut 0.65s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__line--cta {
+  animation: splashExitCtaFlatten 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__cta-prefix {
+  animation: splashExitPrefixOut 0.48s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.splash--exit .splash__cta-deeper {
+  animation: splashExitDeeperOut 0.52s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  z-index: 4;
+  will-change: opacity, filter;
+}
+
+.splash--exit .splash__cta-deeper::after {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
 @keyframes splashIntro {
@@ -239,10 +301,114 @@
   }
 }
 
-@keyframes splashExit {
+@keyframes splashExitFadeAll {
+  from {
+    opacity: 1;
+  }
   to {
-    clip-path: circle(0% at 50% 50%);
     opacity: 0;
+  }
+}
+
+@keyframes splashExitNoiseOut {
+  from {
+    opacity: 0.07;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splashExitVignetteOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splashExitGridOut {
+  from {
+    opacity: 0.12;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splashExitScanOut {
+  from {
+    opacity: 0.16;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splashExitOrbOut {
+  from {
+    opacity: 0.22;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splashExitCtaFlatten {
+  from {
+    transform: rotate(2deg) skewX(4deg);
+  }
+  to {
+    transform: rotate(0deg) skewX(0deg);
+  }
+}
+
+@keyframes splashExitPrefixOut {
+  from {
+    opacity: 1;
+    transform: skewX(-4deg) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: skewX(0deg) translateY(-6px);
+  }
+}
+
+@keyframes splashExitDeeperOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
+    filter: blur(3px);
+  }
+}
+
+@keyframes splashPrefixPhaseIn {
+  from {
+    opacity: 0;
+    transform: skewX(-4deg) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: skewX(-4deg) translateY(0);
+  }
+}
+
+@keyframes deeperPhaseReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
   }
 }
 

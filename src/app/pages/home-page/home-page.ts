@@ -66,14 +66,14 @@ export class HomePage implements OnInit {
     this.splashTimeouts.push(
       window.setTimeout(() => {
         this.splashPhase.set(3);
-      }, 6400),
+      }, 7000),
     );
 
     this.splashTimeouts.push(
       window.setTimeout(() => {
         document.body.style.overflow = '';
         this.splashDismissed.set(true);
-      }, 7700),
+      }, 8250),
     );
   }
 
