@@ -1,0 +1,68 @@
+:root {
+  /* Primary (marca) */
+  --color-primary: #aadc00;
+  --color-primary-hover: #96c800;
+  --color-primary-active: #7fb000;
+  --color-primary-light: rgba(170, 220, 0, 0.1);
+  --color-primary-glow: rgba(170, 220, 0, 0.3);
+  --gradient-primary: linear-gradient(90deg, #aadc00 0%, rgba(170, 220, 0, 0) 100%);
+
+  /* Background */
+  --color-bg-main: #0a0a0a;
+  --color-bg-dark: #111111;
+  --color-bg-mid: #1a1a1a;
+  --color-bg-card: #151515;
+  --color-bg-hover: #202020;
+
+  /* Text */
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #bbbbbb;
+  --color-text-muted: #888888;
+  --color-text-disabled: #555555;
+  --color-text-on-primary: #0a0a0a;
+
+  /* Borders */
+  --color-border-default: #2a2a2a;
+  --color-border-light: #3a3a3a;
+  --color-border-strong: #444444;
+  --color-border-focus: #aadc00;
+
+  /* Status (futuro) */
+  --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.1);
+  --color-error: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+  --color-warning: #facc15;
+  --color-warning-bg: rgba(250, 204, 21, 0.1);
+
+  /* Overlay */
+  --color-overlay-dark: rgba(0, 0, 0, 0.6);
+  --color-overlay-light: rgba(255, 255, 255, 0.05);
+
+  /* Tipografia */
+  --font-hero: 'Black Han Sans', 'Barlow Condensed', system-ui, sans-serif;
+  --font-ui: 'Barlow Condensed', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+
+  /* Layout / efeito */
+  --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 72px;
+  --header-height: 72px;
+
+  /* Aliases usados no código existente */
+  --color-bg: var(--color-bg-main);
+  --color-bg-elevated: var(--color-bg-mid);
+  --color-brand: var(--color-primary);
+  --color-accent: var(--color-primary);
+  --color-text: var(--color-text-primary);
+  --color-glass-border: var(--color-border-default);
+  --color-glass-bg: rgba(10, 10, 10, 0.72);
+  --font-display: var(--font-ui);
+}

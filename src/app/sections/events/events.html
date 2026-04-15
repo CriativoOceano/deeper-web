@@ -1,0 +1,42 @@
+<section class="section events" id="eventos">
+  <div class="section__inner">
+    <p class="section__eyebrow events__badge">Eventos</p>
+    <h2 class="section__title heading-section">Próximos encontros</h2>
+    <p class="section__lead">Confirme sua presença e vem viver o Deeper com a gente.</p>
+
+    @if (site.loadError() && site.events().length === 0) {
+      <p class="events__hint">Não foi possível carregar os eventos agora. Tente de novo em instantes.</p>
+    }
+
+    <div class="events__grid">
+      @for (event of site.events(); track event.id) {
+        <article class="events__card glass-panel">
+          <div class="events__media">
+            <img
+              [src]="thumbUrl(event.id, event.image)"
+              (error)="onImgError(event.id)"
+              [alt]="event.title"
+              width="800"
+              height="500"
+              loading="lazy"
+            />
+          </div>
+          <div class="events__body">
+            <h3 class="events__title heading-sub">{{ event.title }}</h3>
+            <p class="events__meta">
+              {{ event.date | date: "d 'de' MMMM yyyy '•' HH:mm" }}
+            </p>
+            <p class="events__loc">{{ event.location }}</p>
+            <a class="btn btn--primary events__btn" [href]="event.formUrl" target="_blank" rel="noopener noreferrer">
+              Participar
+            </a>
+          </div>
+        </article>
+      }
+    </div>
+
+    @if (site.events().length === 0 && !site.loadError()) {
+      <p class="events__hint">Novos eventos em breve. Fique de olho no Instagram.</p>
+    }
+  </div>
+</section>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Churrasco DEEPER | Inscrição</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:wght@500;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #aadc00;
+      --black: #0a0a0a;
+      --card: #151515;
+      --line: #2a2a2a;
+      --white: #f5f5f5;
+      --gray: #a1a1aa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 80% 20%, rgba(170,220,0,.16), transparent 35%), var(--black);
+      color: var(--white);
+      font-family: "Barlow", sans-serif;
+      line-height: 1.5;
+      padding: 24px;
+    }
+    .container { max-width: 980px; margin: 0 auto; }
+    .countdown-sticky {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      margin: 0 auto 16px;
+      max-width: 980px;
+      border: 1px solid rgba(170,220,0,.38);
+      background: rgba(10,10,10,.86);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .countdown-sticky-label {
+      color: #d4d4d8;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-family: "Barlow Condensed", sans-serif;
+    }
+    .countdown-sticky-value {
+      color: var(--green);
+      font-family: "Barlow Condensed", sans-serif;
+      letter-spacing: .03em;
+      font-size: 1.06rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    body.splash-open { overflow: hidden; }
+    .page-content {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .page-content.hidden-by-splash {
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+      user-select: none;
+    }
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(170,220,0,.18), transparent 42%),
+        radial-gradient(circle at 84% 78%, rgba(170,220,0,.12), transparent 40%),
+        #080808;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .splash-screen.open {
+      display: flex;
+      opacity: 1;
+      visibility: visible;
+    }
+    .splash-screen.closing {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .splash-card {
+      position: relative;
+      width: min(100%, 530px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 34px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .5);
+      overflow: hidden;
+    }
+    .splash-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      border: 1px solid rgba(170,220,0,.5);
+      opacity: .28;
+      pointer-events: none;
+      box-shadow: 0 0 0 rgba(170,220,0,0);
+      transition: opacity .25s ease;
+    }
+    .splash-card.pulse-border::before {
+      animation: borderPulse 1.2s ease-in-out infinite;
+      opacity: 1;
+    }
+    .splash-card::after {
+      content: none;
+    }
+    .splash-sequence {
+      position: relative;
+      min-height: 122px;
+    }
+    .splash-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(-50%);
+      will-change: transform, opacity;
+      transition: opacity .28s ease;
+    }
+    .splash-line.active { opacity: 1; }
+    .splash-line.exiting { opacity: 0; }
+    .splash-line strong {
+      color: var(--green);
+      font-weight: 800;
+    }
+    .splash-line.one {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(1.35rem, 5vw, 2rem);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #e4e4e7;
+    }
+    .splash-line.two {
+      font-family: "Black Han Sans", sans-serif;
+      font-size: clamp(1.6rem, 6.2vw, 3rem);
+      line-height: .92;
+      color: var(--green);
+      white-space: nowrap;
+      transform: translateY(calc(-50% + 8px));
+    }
+    .typing-text {
+      display: inline-block;
+      min-height: 1.2em;
+    }
+    .typing-cursor {
+      display: inline-block;
+      margin-left: 2px;
+      color: var(--green);
+      animation: cursorBlink .9s steps(1) infinite;
+    }
+    .splash-line.two .typing-cursor { color: #f5f5f5; }
+    .splash-glow {
+      display: none;
+    }
+    @keyframes borderPulse {
+      0%, 100% { opacity: .38; box-shadow: 0 0 0 rgba(170,220,0,0); }
+      50% { opacity: 1; box-shadow: 0 0 22px rgba(170,220,0,.36); }
+    }
+    @keyframes cursorBlink {
+      0%, 45% { opacity: 1; }
+      46%, 100% { opacity: 0; }
+    }
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      padding: 30px 26px;
+      margin-bottom: 22px;
+    }
+    .tag {
+      display: inline-block;
+      font-family: "Barlow Condensed", sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: var(--green);
+      color: var(--black);
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+    h1 {
+      font-family: "Black Han Sans", sans-serif;
+      color: var(--green);
+      font-size: clamp(2.1rem, 8vw, 4rem);
+      line-height: .95;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(1rem, 3.5vw, 1.4rem);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      opacity: .9;
+      margin-bottom: 20px;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .meta-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,.02);
+    }
+    .meta-label {
+      font-size: 11px;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 4px;
+    }
+    .meta-value { font-weight: 600; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 20px;
+    }
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      padding: 22px;
+    }
+    h2 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .desc { color: var(--gray); margin-bottom: 14px; }
+    ul { padding-left: 18px; color: #e4e4e7; display: grid; gap: 6px; }
+    form { display: grid; gap: 12px; }
+    label { display: grid; gap: 6px; font-weight: 500; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #3f3f46;
+      background: #0f0f10;
+      color: var(--white);
+      border-radius: 10px;
+      padding: 12px;
+      font: inherit;
+    }
+    textarea { min-height: 80px; resize: vertical; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      background: var(--green);
+      color: #111;
+      font-family: "Barlow Condensed", sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 800;
+      padding: 13px;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    #btnEnviar {
+      width: 100%;
+      color: #111;
+      margin-top: 10px;
+    }
+    .status {
+      margin-top: 8px;
+      font-size: .95rem;
+      color: var(--gray);
+      min-height: 22px;
+    }
+    .status.ok { color: #9ef01a; }
+    .status.err { color: #f87171; }
+    .alert-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+    }
+    .alert-modal.open { display: flex; }
+    .alert-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .7);
+      backdrop-filter: blur(3px);
+    }
+    .alert-card {
+      position: relative;
+      width: min(100%, 440px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #1a1a1b, #101011);
+      padding: 22px 20px 18px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .45);
+    }
+    .alert-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .alert-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-family: "Barlow Condensed", sans-serif;
+    }
+    .alert-title {
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 1rem;
+    }
+    .alert-message {
+      color: #ececef;
+      margin-bottom: 16px;
+      font-size: .98rem;
+    }
+    .alert-close {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .alert-card.success .alert-badge { background: rgba(170,220,0,.18); color: var(--green); }
+    .alert-card.success .alert-title { color: var(--green); }
+    .alert-card.success .alert-close { background: var(--green); color: #111; }
+    .alert-card.error .alert-badge { background: rgba(248,113,113,.16); color: #fca5a5; }
+    .alert-card.error .alert-title { color: #fca5a5; }
+    .alert-card.error .alert-close { background: #f87171; color: #111; }
+    .small { font-size: 12px; color: var(--gray); }
+    .lp-footer {
+      margin: 22px auto 0;
+      max-width: 980px;
+      border-top: 1px solid var(--line);
+      padding: 16px 10px 4px;
+      text-align: center;
+      color: #b9b9c0;
+      font-size: .83rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .age-warning {
+      border: 1px solid rgba(248,113,113,.42);
+      background: rgba(248,113,113,.09);
+      color: #fecaca;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: .92rem;
+      margin-bottom: 8px;
+    }
+    .restriction-notice {
+      border: 1px solid rgba(248,113,113,.42);
+      background: rgba(248,113,113,.09);
+      color: #fecaca;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: .95rem;
+      margin-top: 10px;
+    }
+    .is-hidden { display: none !important; }
+    .faq-section {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      padding: 22px;
+    }
+    .faq-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .faq-item {
+      border: 1px solid #2f2f32;
+      border-radius: 10px;
+      background: rgba(255,255,255,.02);
+      padding: 10px 12px;
+    }
+    .faq-item summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+      font-family: "Barlow Condensed", sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #ececef;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      float: right;
+      color: var(--green);
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    .faq-item[open] summary::after { content: "-"; }
+    .faq-answer {
+      margin-top: 8px;
+      color: #d4d4d8;
+      font-size: .96rem;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      body { padding: 14px; }
+      .hero, .box { padding: 18px; border-radius: 14px; }
+      .countdown-sticky {
+        top: 8px;
+        padding: 9px 12px;
+        gap: 8px;
+      }
+      .countdown-sticky-label { font-size: .75rem; }
+      .countdown-sticky-value { font-size: .95rem; }
+      .splash-card { padding: 30px 18px; border-radius: 18px; }
+      .splash-sequence { min-height: 116px; }
+      .splash-line.one,
+      .splash-line.two { top: 50%; }
+      .lp-footer {
+        margin-top: 18px;
+        padding: 14px 6px 2px;
+        font-size: .76rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="splashScreen" class="splash-screen" aria-hidden="true">
+    <div class="splash-card">
+      <div class="splash-sequence">
+        <p id="splashLineOne" class="splash-line one"><span id="splashTextOne" class="typing-text"></span><span class="typing-cursor">|</span></p>
+        <p id="splashLineTwo" class="splash-line two"><span id="splashTextTwo" class="typing-text"></span><span class="typing-cursor">|</span></p>
+      </div>
+      <div class="splash-glow" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="countdown-sticky" aria-live="polite">
+    <span class="countdown-sticky-label">Contagem regressiva</span>
+    <span id="countdownValue" class="countdown-sticky-value">Carregando...</span>
+  </div>
+
+  <main id="pageContent" class="container page-content">
+    <section class="hero">
+      <span class="tag">Juventude DEEPER</span>
+      <h1>CHURRAS DEEPER</h1>
+      <p class="subtitle">Inscrições abertas (VAGAS LIMITADAS)</p>
+      <div class="meta">
+        <div class="meta-item">
+          <p class="meta-label">🗓️ Data</p>
+          <p class="meta-value">21/04/2026 (Terça) </br/>(Feriado tiradentes)</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">🕒 Saída</p>
+          <p class="meta-value">08h30 <br/>Igreja Oceano Águas Claras</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">📍 Local</p>
+          <p class="meta-value">Sede Campestre Oceano</p>
+        </div>
+        <div class="meta-item">
+          <p class="meta-label">💰 Valor</p>
+          <p class="meta-value">Gratuito</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="box">
+        <h2>Sobre o evento</h2>
+        <p class="desc">Muito mais que um churrasco. 🥩🔥 <br/><br/>
+
+O Churras <span style="font-weight: 700; color: #aadc00;">DEEPER</span> é o nosso momento de desconectar da rotina. É brasa, carne, música e aquela resenha de qualidade que só a nossa galera tem.<br/>
+
+<p>O que vamos ter por lá:</p>
+<ul style="list-style-type: none;">
+          <li>🎸 Louvor e Palavra</li>
+          <li>🔥 Churrasco</li>
+          <li>🏊 Piscina</li>
+          <li>⚽️ Jogos e resenha</li>
+          <li style="font-weight: 700; color: #aadc00;">🫵 VOCÊ</li>
+        </ul><br>
+ Se você faz parte do <span style="font-weight: 700; color: #aadc00;">DEEPER</span>, seu lugar é em volta dessa churrasqueira. Vem pra brasa!</p>
+        
+      </article>
+
+      <article class="box">
+        <h2>Confirme sua presença</h2>
+        <form id="inscricaoForm">
+          <label>
+            Você é membro da Igreja Oceano - Águas Claras?
+            <select id="eligibilitySelect" required>
+              <option value="">Selecione</option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+          </label>
+
+          <div id="restrictionNotice" class="restriction-notice is-hidden">
+            Somente jovens membros da Igreja Oceano da Graça - Águas Claras podem participar desse evento.
+          </div>
+
+          <div id="memberFields" class="is-hidden">
+            <p class="age-warning">Aviso: a participação é permitida somente para jovens de 18 a 35 anos.</p>
+          <label>
+            Nome completo
+            <input name="nome" required minlength="2" autocomplete="name">
+          </label>
+          <label>
+            E-mail
+            <input type="email" name="email" required autocomplete="email">
+          </label>
+          <label>
+            Telefone (WhatsApp)
+            <input type="tel" name="telefone" required autocomplete="tel" maxlength="16" placeholder="(99) 9 9999-9999">
+          </label>
+          <label>
+            Precisa de carona?
+            <select name="precisaCarona" required>
+              <option value="">Selecione</option>
+              <option value="sim">Sim, preciso de carona</option>
+              <option value="nao">Não preciso</option>
+            </select>
+          </label>
+          <label>
+            Tem carona para oferecer?
+            <select name="temCarona" required>
+              <option value="">Selecione</option>
+              <option value="1 vaga">Tenho 1 vaga</option>
+              <option value="2 vagas">Tenho 2 vagas</option>
+              <option value="3 vagas">Tenho 3 vagas</option>
+              <option value="4 vagas">Tenho 4 vagas</option>
+              <option value="nao">Não</option>
+            </select>
+          </label>
+          <label>
+            Observações (opcional)
+            <textarea name="obs" placeholder="Ex.: Costumo dar prejuizo em rodízios... KKKKK"></textarea>
+          </label>
+
+          <button id="btnEnviar" type="submit">Enviar inscrição</button>
+          <p class="small">Se tiver problemas ou dúvidas, procure a liderança.</p>
+          <p id="status" class="status"></p>
+          </div>
+        </form>
+      </article>
+    </section>
+
+    <section class="faq-section">
+      <h2>Perguntas frequentes</h2>
+      <p class="desc">Se pintou alguma dúvida, dá uma olhada aqui:</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Precisa pagar para participar?</summary>
+          <p class="faq-answer">Não. O Churras DEEPER é gratuito.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Posso levar convidado?</summary>
+          <p class="faq-answer">Não, esse evento é somente para jovens membros da igreja Oceano da Graça <span style="font-weight: 700; color: #aadc00;">ÁGUAS CLARAS.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary>Vai ter carona?</summary>
+          <p class="faq-answer">Sim. No formulário você informa se precisa de carona ou se pode oferecer vagas em seu carro.<br/><span style="font-weight: 700; color: #aadc00;"> OBS: Faremos organização de caronas com base no número de carros e vagas disponíveis. Antes de se inscrever fale com um amigo e já reserve a sua carona.</span></p>
+        </details>
+        <details class="faq-item">
+          <summary>O que preciso levar?</summary>
+          <p class="faq-answer">Leve roupa confortável, sua bíblia, itens de piscina, bola, jogos e muita disposição para viver esse dia com a galera.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Até quando posso me inscrever?</summary>
+          <p class="faq-answer">As inscrições ficam abertas até dia 19/04/2026 às 23:59 (domingo). Confirme sua presença o quanto antes.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lp-footer">DEEPER®️ powered by Oceano da Graça. 2026. Todos os direitos reservados.</footer>
+
+  <div id="alertModal" class="alert-modal" aria-hidden="true">
+    <div class="alert-overlay" data-close-modal="true"></div>
+    <div id="alertCard" class="alert-card success" role="alertdialog" aria-modal="true" aria-labelledby="alertTitle">
+      <div class="alert-head">
+        <span id="alertBadge" class="alert-badge">✓</span>
+        <h3 id="alertTitle" class="alert-title">Sucesso</h3>
+      </div>
+      <p id="alertMessage" class="alert-message"></p>
+      <button id="alertClose" class="alert-close" type="button">Fechar</button>
+    </div>
+  </div>
+
+  <script>
+    // 1) Crie um Apps Script com doPost gravando no Sheets
+    // 2) Publique como Web App (acesso: Anyone)
+    // 3) Cole a URL abaixo
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLPaBPtSeQrvEqHLw74jEUHmZo9oOERBrsHbjZ4D2Qod-d6clnJPio22o8WxLwmUkM/exec";
+
+    const form = document.getElementById("inscricaoForm");
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("btnEnviar");
+    const eligibilitySelect = document.getElementById("eligibilitySelect");
+    const memberFields = document.getElementById("memberFields");
+    const restrictionNotice = document.getElementById("restrictionNotice");
+    const phoneInput = form.querySelector('input[name="telefone"]');
+    const modal = document.getElementById("alertModal");
+    const alertCard = document.getElementById("alertCard");
+    const alertTitle = document.getElementById("alertTitle");
+    const alertMessage = document.getElementById("alertMessage");
+    const alertBadge = document.getElementById("alertBadge");
+    const alertClose = document.getElementById("alertClose");
+    const splashScreen = document.getElementById("splashScreen");
+    const splashCard = splashScreen.querySelector(".splash-card");
+    const splashLineOne = document.getElementById("splashLineOne");
+    const splashLineTwo = document.getElementById("splashLineTwo");
+    const splashTextOne = document.getElementById("splashTextOne");
+    const splashTextTwo = document.getElementById("splashTextTwo");
+    const pageContent = document.getElementById("pageContent");
+    const countdownValue = document.getElementById("countdownValue");
+    const splashPhraseOne = "O FUTURO É MAIS PROFUNDO!";
+    const splashPhraseTwo = "VEM SER DEEPER!";
+    const typingSpeedOneMs = 52;
+    const typingSpeedTwoMs = 78;
+    const betweenPhrasesMs = 520;
+    const fadeOutFirstMs = 280;
+    const endHoldMs = 820;
+    const secondLineDelayMs = 220 + (splashPhraseOne.length * typingSpeedOneMs) + betweenPhrasesMs;
+    const splashDurationMs = secondLineDelayMs + (splashPhraseTwo.length * typingSpeedTwoMs) + endHoldMs;
+    let borderPulseTimer = null;
+    let splashTimers = [];
+
+    function normalizePhone(value) {
+      return String(value || "").replace(/\D/g, "").slice(0, 11);
+    }
+
+    function setFormEnabled(enabled) {
+      const formControls = memberFields.querySelectorAll("input, select, textarea, button");
+      formControls.forEach((control) => {
+        control.disabled = !enabled;
+      });
+    }
+
+    function resetFormFieldsExceptEligibility() {
+      const formControls = memberFields.querySelectorAll("input, select, textarea");
+      formControls.forEach((control) => {
+        if (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) {
+          control.value = "";
+        } else if (control instanceof HTMLSelectElement) {
+          control.selectedIndex = 0;
+        }
+      });
+    }
+
+    function updateEligibilityUI() {
+      const value = eligibilitySelect.value;
+      if (value === "nao") {
+        memberFields.classList.add("is-hidden");
+        restrictionNotice.classList.remove("is-hidden");
+        statusEl.textContent = "";
+        statusEl.className = "status";
+        resetFormFieldsExceptEligibility();
+        setFormEnabled(false);
+        return;
+      }
+
+      if (value === "sim") {
+        restrictionNotice.classList.add("is-hidden");
+        memberFields.classList.remove("is-hidden");
+        setFormEnabled(true);
+        return;
+      }
+
+      memberFields.classList.add("is-hidden");
+      restrictionNotice.classList.add("is-hidden");
+      statusEl.textContent = "";
+      statusEl.className = "status";
+      resetFormFieldsExceptEligibility();
+      setFormEnabled(false);
+    }
+
+    function formatPhone(value) {
+      const digits = normalizePhone(value);
+      const ddd = digits.slice(0, 2);
+      const first = digits.slice(2, 3);
+      const middle = digits.slice(3, 7);
+      const last = digits.slice(7, 11);
+
+      if (digits.length === 0) return "";
+      if (digits.length <= 2) return `(${ddd}`;
+      if (digits.length <= 3) return `(${ddd}) ${first}`;
+      if (digits.length <= 7) return `(${ddd}) ${first} ${middle}`;
+      return `(${ddd}) ${first} ${middle}-${last}`;
+    }
+
+    function openAlert(type, message) {
+      const isSuccess = type === "success";
+      alertCard.className = `alert-card ${isSuccess ? "success" : "error"}`;
+      alertTitle.textContent = isSuccess ? "Inscrição confirmada" : "Falha na inscrição";
+      alertBadge.textContent = isSuccess ? "✓" : "!";
+      alertMessage.textContent = message;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      alertClose.focus();
+    }
+
+    function closeAlert() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      form.reset();
+      statusEl.textContent = "";
+      statusEl.className = "status";
+      phoneInput.value = "";
+      updateEligibilityUI();
+    }
+
+    function clearSplashTimers() {
+      splashTimers.forEach((timerId) => window.clearTimeout(timerId));
+      splashTimers = [];
+    }
+
+    function queueSplashTimeout(callback, delayMs) {
+      const timerId = window.setTimeout(callback, delayMs);
+      splashTimers.push(timerId);
+      return timerId;
+    }
+
+    function typeText(targetEl, text, speedMs, onComplete) {
+      targetEl.textContent = "";
+      let index = 0;
+
+      function tick() {
+        if (index >= text.length) {
+          if (typeof onComplete === "function") {
+            onComplete();
+          }
+          return;
+        }
+        targetEl.textContent += text.charAt(index);
+        index += 1;
+        queueSplashTimeout(tick, speedMs);
+      }
+
+      queueSplashTimeout(tick, speedMs);
+    }
+
+    function openSplash() {
+      if (borderPulseTimer) {
+        window.clearTimeout(borderPulseTimer);
+      }
+      clearSplashTimers();
+      splashCard.classList.remove("pulse-border");
+      splashLineOne.classList.remove("active", "exiting");
+      splashLineTwo.classList.remove("active", "exiting");
+      splashTextOne.textContent = "";
+      splashTextTwo.textContent = "";
+      splashScreen.classList.add("open");
+      splashScreen.classList.remove("closing");
+      splashScreen.setAttribute("aria-hidden", "false");
+      pageContent.classList.add("hidden-by-splash");
+      document.body.classList.add("splash-open");
+      queueSplashTimeout(() => {
+        splashLineOne.classList.add("active");
+        typeText(splashTextOne, splashPhraseOne, typingSpeedOneMs, () => {
+          queueSplashTimeout(() => {
+            splashLineOne.classList.add("exiting");
+            queueSplashTimeout(() => {
+              splashLineOne.classList.remove("active", "exiting");
+              splashLineTwo.classList.add("active");
+              typeText(splashTextTwo, splashPhraseTwo, typingSpeedTwoMs);
+            }, fadeOutFirstMs);
+          }, betweenPhrasesMs);
+        });
+      }, 220);
+      borderPulseTimer = window.setTimeout(() => {
+        splashCard.classList.add("pulse-border");
+      }, secondLineDelayMs);
+    }
+
+    function closeSplash() {
+      if (borderPulseTimer) {
+        window.clearTimeout(borderPulseTimer);
+        borderPulseTimer = null;
+      }
+      clearSplashTimers();
+      splashCard.classList.remove("pulse-border");
+      splashScreen.classList.add("closing");
+      splashScreen.classList.remove("open");
+      splashScreen.setAttribute("aria-hidden", "true");
+      pageContent.classList.remove("hidden-by-splash");
+      document.body.classList.remove("splash-open");
+      window.setTimeout(() => {
+        splashScreen.classList.remove("closing");
+      }, 320);
+    }
+
+    function getEventDate() {
+      return new Date(2026, 3, 21, 8, 30, 0);
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const target = getEventDate();
+      const diff = target.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        countdownValue.textContent = "Evento iniciado";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      countdownValue.textContent = `${days}d ${hours}h ${minutes}min ${seconds}s`;
+    }
+
+    modal.addEventListener("click", (event) => {
+      if (event.target instanceof HTMLElement && event.target.dataset.closeModal === "true") {
+        closeAlert();
+      }
+    });
+
+    alertClose.addEventListener("click", closeAlert);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.classList.contains("open")) {
+        closeAlert();
+      }
+      if (event.key === "Escape" && splashScreen.classList.contains("open")) {
+        closeSplash();
+      }
+    });
+
+    phoneInput.addEventListener("input", () => {
+      phoneInput.value = formatPhone(phoneInput.value);
+    });
+    eligibilitySelect.addEventListener("change", updateEligibilityUI);
+
+    updateCountdown();
+    window.setInterval(updateCountdown, 1000);
+
+    openSplash();
+    window.setTimeout(closeSplash, splashDurationMs);
+    updateEligibilityUI();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (eligibilitySelect.value !== "sim") {
+        return;
+      }
+      statusEl.className = "status";
+      const phoneDigits = normalizePhone(phoneInput.value);
+
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("COLE_AQUI")) {
+        statusEl.textContent = "Configure a URL do Google Apps Script no código para enviar ao Sheets.";
+        statusEl.classList.add("err");
+        openAlert("error", "A URL de integração ainda não foi configurada corretamente.");
+        return;
+      }
+
+      if (phoneDigits.length !== 11) {
+        openAlert("error", "Telefone incompleto. Use o formato (99) 9 9999-9999.");
+        return;
+      }
+
+      const fd = new FormData(form);
+      const payload = {
+        membroOceanoAguasClaras: eligibilitySelect.value === "sim" ? "sim" : "nao",
+        nome: String(fd.get("nome") || "").trim(),
+        email: String(fd.get("email") || "").trim().toLowerCase(),
+        telefone: normalizePhone(fd.get("telefone")),
+        precisaCarona: String(fd.get("precisaCarona") || ""),
+        temCarona: String(fd.get("temCarona") || ""),
+        obs: String(fd.get("obs") || "").trim(),
+        origem: "Landing Churrasco DEEPER",
+        enviadoEm: new Date().toISOString()
+      };
+
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
+      statusEl.textContent = "Enviando sua inscrição...";
+
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        console.log("Resposta do Apps Script:", res);
+        if (!res.ok) {
+          throw new Error("Falha no endpoint");
+        }
+
+        const result = await res.json().catch(() => ({}));
+        if (result && result.ok === false) {
+          throw new Error(result.message || "Não foi possível concluir sua inscrição.");
+        }
+
+        const message = result && result.message
+          ? result.message
+          : "Inscrição enviada com sucesso! Nos vemos no churrasco.";
+        statusEl.textContent = message;
+        statusEl.classList.add("ok");
+        openAlert("success", message);
+        form.reset();
+      } catch (err) {
+        const message = err instanceof Error && err.message
+          ? err.message
+          : "Não foi possível enviar agora. Tente de novo em instantes.";
+        statusEl.textContent = message;
+        statusEl.classList.add("err");
+        openAlert("error", message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enviar inscrição";
+      }
+    });
+  </script>
+</body>
+</html>

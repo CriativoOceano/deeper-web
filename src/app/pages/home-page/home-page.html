@@ -1,0 +1,32 @@
+<app-shell>
+  <app-glass-header />
+  <a
+    class="back-to-top glass-panel"
+    [class.back-to-top--visible]="!isAtTop()"
+    [attr.aria-hidden]="isAtTop() ? 'true' : 'false'"
+    href="#top"
+    aria-label="Voltar ao topo"
+    title="Voltar ao topo"
+  >
+    <span aria-hidden="true">↑</span>
+  </a>
+  <main>
+    <app-hero />
+    <app-about />
+    <section class="vibe-break" aria-label="Identidade Deeper">
+      <div class="section__inner vibe-break__inner">
+        <p class="vibe-break__word vibe-break__word--deeper" data-word="DEEPER">DEEPER</p>
+        <p class="vibe-break__word vibe-break__word--jesus" data-word="JESUS">JESUS</p>
+      </div>
+    </section>
+    <app-purpose />
+    <section class="energy-divider" aria-hidden="true">
+      <div class="section__inner energy-divider__inner">
+        <span></span>
+      </div>
+    </section>
+    <app-events />
+    <app-final-cta />
+  </main>
+  <app-site-footer />
+</app-shell>

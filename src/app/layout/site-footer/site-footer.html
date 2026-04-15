@@ -1,0 +1,43 @@
+<footer class="footer">
+  <div class="section__inner footer__inner">
+    <div class="footer__brand">
+      <span class="footer__logo">
+        <span class="footer__name">
+          <span class="footer__title">{{ site.config().siteTitle }}</span>
+        </span>
+        <span class="footer__mark" aria-hidden="true"></span>
+      </span>
+      <span class="footer__church">{{ site.config().churchName }}</span>
+    </div>
+    <div class="footer__links">
+      <a
+        [href]="site.config().instagram"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram do Deeper"
+        title="Instagram do Deeper"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+          <circle cx="12" cy="12" r="4.2"></circle>
+          <circle cx="17.3" cy="6.7" r="1"></circle>
+        </svg>
+      </a>
+      <span class="footer__dot" aria-hidden="true">·</span>
+      <a
+        [href]="site.config().mainSiteUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Site da igreja"
+        title="Site da igreja"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3 12h18"></path>
+          <path d="M12 3c2.9 2.7 4.2 5.8 4.2 9S14.9 18.3 12 21c-2.9-2.7-4.2-5.8-4.2-9S9.1 5.7 12 3z"></path>
+        </svg>
+      </a>
+    </div>
+    <p class="footer__copy">© {{ year }} {{ site.config().churchName }}</p>
+  </div>
+</footer>

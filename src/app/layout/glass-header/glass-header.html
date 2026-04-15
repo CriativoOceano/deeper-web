@@ -1,0 +1,65 @@
+<header class="header glass-panel" [class.header--top]="isAtTop()">
+  <div class="header__inner">
+    <a class="header__brand" href="#top" (click)="scrollTo($event, 'top')">
+      <span class="header__mark" aria-hidden="true"></span>
+      <span class="header__title">{{ site.config().siteTitle }}</span>
+    </a>
+
+    <nav class="header__nav" aria-label="Principal">
+      <a href="#top" (click)="scrollTo($event, 'top')">Início</a>
+      <a href="#sobre" (click)="scrollTo($event, 'sobre')">Quem somos</a>
+      <a href="#proposito" (click)="scrollTo($event, 'proposito')">Propósito</a>
+      <a href="#eventos" (click)="scrollTo($event, 'eventos')">Eventos</a>
+    </nav>
+
+    <button
+      class="header__menu-toggle"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen()"
+      aria-label="Abrir menu"
+      title="Menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <a
+      class="header__cta"
+      [href]="site.config().instagram"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram do Deeper"
+      title="Instagram do Deeper"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+        <circle cx="12" cy="12" r="4.2"></circle>
+        <circle cx="17.3" cy="6.7" r="1"></circle>
+      </svg>
+    </a>
+  </div>
+
+  <div class="header__mobile-menu" [class.header__mobile-menu--open]="isMenuOpen()">
+    <a href="#top" (click)="scrollTo($event, 'top')">Início</a>
+    <a href="#sobre" (click)="scrollTo($event, 'sobre')">Quem somos</a>
+    <a href="#proposito" (click)="scrollTo($event, 'proposito')">Propósito</a>
+    <a href="#eventos" (click)="scrollTo($event, 'eventos')">Eventos</a>
+    <a
+      [href]="site.config().instagram"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram do Deeper"
+      title="Instagram do Deeper"
+      (click)="closeMenu()"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+        <circle cx="12" cy="12" r="4.2"></circle>
+        <circle cx="17.3" cy="6.7" r="1"></circle>
+      </svg>
+      Instagram
+    </a>
+  </div>
+</header>

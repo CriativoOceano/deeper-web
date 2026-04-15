@@ -1,59 +1,59 @@
-# Deeper
+# Deeper — landing (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.2.
+Landing da juventude **Deeper**: visual escuro, glass (estilo Apple) e eventos vindos de JSON (planilha + Apps Script em produção, mock local em desenvolvimento).
 
-## Development server
-
-To start a local development server, run:
+## Desenvolvimento
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abra `http://localhost:4200/`. Com `eventsApiUrl` vazio em `src/environments/environment.ts`, o app carrega [`public/mock-api.json`](public/mock-api.json).
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Build de produção
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+A configuração de produção troca o ambiente por `src/environments/environment.prod.ts` (veja `fileReplacements` em `angular.json`). Substitua `eventsApiUrl` pela URL do Web App do Apps Script após publicar.
 
-## Running unit tests
+## Google Sheets — estrutura
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+| Aba          | Uso                                                                 |
+| ------------ | ------------------------------------------------------------------- |
+| `events`     | Uma linha por evento; controle de exibição com `active`             |
+| `config`     | Pares `key` / `value` (siteTitle, instagram, churchName, …)         |
+| `registrations` | **Fase 2** — inscrições pelo site + `doPost` (não usado no MVP)  |
 
-```bash
-ng test
-```
+### Colunas da aba `events`
 
-## Running end-to-end tests
+| Campo       | Tipo   | Observação                          |
+| ----------- | ------ | ----------------------------------- |
+| id          | texto  | Único, ex.: `evt_001`               |
+| title       | texto  | Nome do evento                      |
+| date        | texto  | **Sempre ISO**                      |
+| location    | texto  | Local                               |
+| image       | texto  | URL **https** da imagem             |
+| description | texto  | Resumo                              |
+| formUrl     | texto  | Link do formulário (Caminho A)      |
+| active      | bool   | `TRUE`/`FALSE` ou checkbox          |
 
-For end-to-end (e2e) testing, run:
+### Aba `config` (duas colunas)
 
-```bash
-ng e2e
-```
+Primeira linha: `key` | `value`. Exemplos de chaves: `siteTitle`, `instagram`, `churchName`, `mainSiteUrl`, `aboutImageUrl`.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Apps Script
 
-## Additional Resources
+O código de leitura (`doGet`) está em [`docs/google-apps-script.js`](docs/google-apps-script.js). Siga os comentários no topo do arquivo para implantar e copiar a URL para `environment.prod.ts`.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Inscrição (MVP)
+
+**Caminho A:** cada evento tem `formUrl`; o botão **Participar** abre o link em nova aba.
+
+**Caminho B (futuro):** formulário no Angular + `doPost` gravando na aba `registrations` — documente o endpoint no mesmo projeto do script quando for implementar.
+
+---
+
+Projeto gerado com [Angular CLI](https://github.com/angular/angular-cli) 21. Documentação: [Angular](https://angular.dev/).
